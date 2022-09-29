@@ -10,7 +10,10 @@ void main() {
       "age?": 25,
       "city?": "New York",
       "birthdate": "@datetime",
-      "timeStamp": "@timestamp"
+      "timeStamp": "@timestamp",
+      "doubleValue": 0.0,
+      "nullableDoubleValue?": 0.0,
+      "value": "#dynamic",
     };
 
     final jsonModel = JsonModel.fromMap(
@@ -23,10 +26,27 @@ void main() {
 
     final output = modelFromJsonModel(jsonModel);
 
+    expect(output, contains('const Types({'));
     expect(output, contains('final String name;'));
     expect(output, contains('final int? age;'));
     expect(output, contains('final String? city;'));
     expect(output, contains('final DateTime birthdate;'));
     expect(output, contains('final DateTime timeStamp;'));
+    expect(output, contains('final double doubleValue;'));
+    expect(output, contains('final double? nullableDoubleValue;'));
+    expect(output, contains('final dynamic value;'));
+
+    expect(output, contains("doubleValue: (json['doubleValue'] as num).toDouble()"));
+    expect(
+      output,
+      contains(
+        "nullableDoubleValue: json['nullableDoubleValue'] != null ? (json['nullableDoubleValue'] as num).toDouble() : null",
+      ),
+    );
+
+    expect(output, contains("value: json['value'] as dynamic"));
+    expect(output, contains("'value': value"));
+
+    print(output);
   });
 }
