@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:json_to_model/core/json_model.dart';
 import 'package:json_to_model/core/model_template.dart';
@@ -7,15 +9,9 @@ import 'package:test/scaffolding.dart';
 
 void main() {
   test('All supported types', () {
-    const content = <String, dynamic>{
-      "name": "Mark",
-      "age?": 25,
-      "city?": "New York",
-      "birthdate": "@datetime",
-      "timeStamp": "@timestamp",
-      "nigger": {"name": "@double1", "surname": 2}
-    };
-
+    final file = File('D:\\dev\\dart\\json_to_model\\test\\test.json');
+    final json = file.readAsStringSync();
+    final content = jsonDecode(json) as Map<String, dynamic>;
     final jsonModel = JsonModel.fromMap(
       'types',
       content,
